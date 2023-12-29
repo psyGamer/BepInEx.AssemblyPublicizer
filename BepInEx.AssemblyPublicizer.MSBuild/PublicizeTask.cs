@@ -90,6 +90,11 @@ public class PublicizeTask : Task
             {
                 options.Strip = bool.Parse(rawStrip);
             }
+            
+            if (optionsHolder.GetMetadata("MaskAssembly") is { } rawMaskAssembly && !string.IsNullOrEmpty(rawMaskAssembly))
+            {
+                options.MaskAssembly = rawMaskAssembly;
+            }
 
             var assemblyPath = taskItem.GetMetadata("FullPath");
             var hash = ComputeHash(File.ReadAllBytes(assemblyPath), options);
@@ -149,6 +154,7 @@ public class PublicizeTask : Task
         HashBool(md5, options.PublicizeCompilerGenerated);
         HashBool(md5, options.IncludeOriginalAttributesAttribute);
         HashBool(md5, options.Strip);
+        HashString(md5, options.MaskAssembly ?? string.Empty);
 
         md5.TransformFinalBlock(bytes, 0, bytes.Length);
 

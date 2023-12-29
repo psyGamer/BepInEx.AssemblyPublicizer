@@ -33,6 +33,7 @@
             <PublicizeCompilerGenerated />
             <IncludeOriginalAttributesAttribute />
             <Strip />
+            <MaskAssembly />
         </Publicize>
     </ItemDefinitionGroup>
 

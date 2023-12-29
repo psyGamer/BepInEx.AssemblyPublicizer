@@ -19,13 +19,14 @@ public sealed class PublicizeCommand : RootCommand
         Add(new Option<bool>("--dont-add-attribute", "Skip injecting OriginalAttributes attribute"));
         Add(new Option<bool>("--strip", "Strips all method bodies by setting them to `throw null;`"));
         Add(new Option<bool>("--strip-only", "Strips without publicizing, equivalent to `--target None --strip`"));
+        Add(new Option<string?>("--mask", "Only publicizes types/fields/methods which are also present in the mask assembly").LegalFilePathsOnly());
         Add(new Option<bool>(new[] { "--overwrite", "-f" }, "Overwrite existing files instead appending a postfix"));
         Add(new Option<bool>("--disable-parallel", "Don't publicize in parallel"));
 
         Handler = HandlerDescriptor.FromDelegate(Handle).GetCommandHandler();
     }
 
-    private static void Handle(FileSystemInfo[] input, string? output, PublicizeTarget target, bool publicizeCompilerGenerated, bool dontAddAttribute, bool strip, bool stripOnly, bool overwrite, bool disableParallel)
+    private static void Handle(FileSystemInfo[] input, string? output, PublicizeTarget target, bool publicizeCompilerGenerated, bool dontAddAttribute, bool strip, bool stripOnly, string? mask, bool overwrite, bool disableParallel)
     {
         var assemblies = new List<FileInfo>();
 
@@ -50,6 +51,7 @@ public sealed class PublicizeCommand : RootCommand
             PublicizeCompilerGenerated = publicizeCompilerGenerated,
             IncludeOriginalAttributesAttribute = false,
             Strip = stripOnly || strip,
+            MaskAssembly = mask,
         };
 
         var stopwatch = Stopwatch.StartNew();

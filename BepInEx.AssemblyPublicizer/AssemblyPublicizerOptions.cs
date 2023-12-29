@@ -9,6 +9,7 @@ public class AssemblyPublicizerOptions
     public bool IncludeOriginalAttributesAttribute { get; set; } = true;
 
     public bool Strip { get; set; } = false;
+    public string? MaskAssembly { get; set; } = null;
 
     internal bool HasTarget(PublicizeTarget target)
     {
